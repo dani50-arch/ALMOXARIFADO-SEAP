@@ -1,0 +1,99 @@
+{% extends 'almoxarifado/base.html' %}
+
+{% block title %}
+Nova Requisição
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                📋 Nova Requisição de Material
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            Número da Requisição
+                        </label>
+                        {{ form.numero }}
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">
+                            Destino
+                        </label>
+                        {{ form.destino }}
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Solicitante
+                        </label>
+                        {{ form.solicitante }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Telefone
+                        </label>
+                        {{ form.telefone }}
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Servidor do Almoxarifado
+                    </label>
+                    {{ form.servidor_almoxarifado }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Observação
+                    </label>
+                    {{ form.observacao }}
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+
+                    <a href="{% url 'home' %}"
+                       class="btn btn-secondary">
+                        ← Voltar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        💾 Salvar Requisição
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

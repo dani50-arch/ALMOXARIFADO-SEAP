@@ -1,0 +1,41 @@
+{% extends 'almoxarifado/base.html' %}
+
+{% block titulo %}
+Relatório de Estoque
+{% endblock %}
+
+{% block conteudo %}
+
+<h1 class="mb-4">
+    Relatório de Estoque Atual
+</h1>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Saldo Atual</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in itens %}
+
+        <tr>
+            <td>{{ item.codigo }}</td>
+            <td>{{ item.descricao }}</td>
+            <td>{{ item.categoria.nome }}</td>
+            <td>{{ item.saldo_atual }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

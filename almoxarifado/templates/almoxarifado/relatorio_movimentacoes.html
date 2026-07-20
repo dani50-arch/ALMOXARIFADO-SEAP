@@ -1,0 +1,62 @@
+{% extends 'almoxarifado/base.html' %}
+
+{% block titulo %}
+Relatório de Movimentações
+{% endblock %}
+
+{% block conteudo %}
+
+<h1 class="mb-4">
+    Relatório de Movimentações
+</h1>
+
+<table class="table table-striped">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Item</th>
+            <th>Quantidade</th>
+            <th>Responsável</th>
+            <th>Documento</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for mov in movimentacoes %}
+
+        <tr>
+            <td>
+                {{ mov.data_movimentacao|date:"d/m/Y H:i" }}
+            </td>
+
+            <td>
+                {{ mov.get_tipo_display }}
+            </td>
+
+            <td>
+                {{ mov.item.descricao }}
+            </td>
+
+            <td>
+                {{ mov.quantidade }}
+            </td>
+
+            <td>
+                {{ mov.responsavel }}
+            </td>
+
+            <td>
+                {{ mov.documento }}
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

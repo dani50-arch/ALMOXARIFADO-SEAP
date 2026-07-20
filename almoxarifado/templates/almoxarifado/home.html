@@ -1,0 +1,91 @@
+{% extends 'almoxarifado/base.html' %}
+
+{% block titulo %}
+Dashboard
+{% endblock %}
+
+{% block conteudo %}
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Categorias</h5>
+                <h2>{{ total_categorias }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Itens</h5>
+                <h2>{{ total_itens }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Fornecedores</h5>
+                <h2>{{ total_fornecedores }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Movimentações</h5>
+                <h2>{{ total_movimentacoes }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr class="my-5">
+
+<h3>Últimas Movimentações</h3>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Item</th>
+            <th>Quantidade</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for mov in ultimas_movimentacoes %}
+
+        <tr>
+            <td>{{ mov.get_tipo_display }}</td>
+            <td>{{ mov.item.descricao }}</td>
+            <td>{{ mov.quantidade }}</td>
+            <td>{{ mov.data_movimentacao|date:"d/m/Y H:i" }}</td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="4">
+                Nenhuma movimentação cadastrada.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
