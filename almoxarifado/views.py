@@ -164,39 +164,21 @@ def nova_entrada(request):
 @login_required
 def nova_saida(request):
 
-    erro = None
-
-    if request.method == 'POST':
+    if request.method == "POST":
 
         form = SaidaForm(request.POST)
 
         if form.is_valid():
 
-            item = form.cleaned_data['item']
-            quantidade = form.cleaned_data['quantidade']
+            saida = form.save(commit=False)
 
-            saldo = item.saldo_atual()
+            saida.tipo = "S"
 
-            if quantidade > saldo:
+            saida.responsavel = request.user.username
 
-                erro = (
-                    f'Estoque insuficiente. '
-                    f'Saldo disponível: {saldo}'
-                )
+            saida.save()
 
-            else:
-
-                saida = form.save(commit=False)
-
-                saida.tipo = 'S'
-
-                saida.responsavel = request.user.username              
-
-                saida.save()
-
-                return redirect(
-                    '/movimentacoes/'
-                )
+            return redirect("movimentacoes")
 
     else:
 
@@ -204,18 +186,17 @@ def nova_saida(request):
 
     return render(
         request,
-        'almoxarifado/nova_saida.html',
+        "almoxarifado/nova_saida.html",
         {
-            'form': form,
-            'erro': erro
-        }
+            "form": form,
+        },
     )
 
 
 @login_required
 def novo_item(request):
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
         form = ItemForm(request.POST)
 
@@ -223,7 +204,7 @@ def novo_item(request):
 
             form.save()
 
-            return redirect('/')
+            return redirect("home")
 
     else:
 
@@ -231,9 +212,9 @@ def novo_item(request):
 
     return render(
         request,
-        'almoxarifado/novo_item.html',
+        "almoxarifado/novo_item.html",
         {
-            'form': form
+            "form": form
         }
     )
 
@@ -385,9 +366,9 @@ def novo_servidor(request):
 
 
 @login_required
-def adicionar_itens_requisicao(request, requisicao_id):
+def adicionar_itens_requisicao(request, pk):
 
-    requisicao = Requisicao.objects.get(id=requisicao_id)
+    requisicao = Requisicao.objects.get(id=pk)
 
     if request.method == "POST":
 
@@ -403,7 +384,7 @@ def adicionar_itens_requisicao(request, requisicao_id):
 
             return redirect(
                 'adicionar_itens_requisicao',
-                requisicao_id=requisicao.id
+                pk=requisicao.id
             )
 
     else:

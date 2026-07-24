@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import (
     MovimentacaoEstoque,
@@ -25,11 +26,32 @@ class EntradaForm(forms.ModelForm):
             'observacao',
         ]
 
+    def clean_quantidade(self):
+
+        quantidade = self.cleaned_data.get("quantidade")
+
+        if quantidade is None or quantidade <= 0:
+            raise forms.ValidationError(
+                "A quantidade deve ser maior que zero."
+            )
+
+        return quantidade
+
+    def clean_documento(self):
+
+        documento = self.cleaned_data.get("documento")
+
+        if not documento:
+            raise forms.ValidationError(
+                "Informe o número da Nota Fiscal, Processo ou Documento."
+            )
+
+        return documento
+
 
 class SaidaForm(forms.ModelForm):
 
     class Meta:
-
         model = MovimentacaoEstoque
 
         fields = [
@@ -39,8 +61,7 @@ class SaidaForm(forms.ModelForm):
             'documento',
             'observacao',
         ]
-
-
+        
         labels = {
             'destino': 'Destino',
             'item': 'Item',
@@ -48,6 +69,55 @@ class SaidaForm(forms.ModelForm):
             'documento': 'Documento',
             'observacao': 'Observação',
         }
+
+    def clean_quantidade(self):
+        quantidade = self.cleaned_data.get('quantidade')
+
+        if quantidade is None or quantidade <= 0:
+            raise forms.ValidationError(
+                "A quantidade deve ser maior que zero."
+            )
+
+        return quantidade
+
+    def clean_documento(self):
+        documento = self.cleaned_data.get('documento')
+
+        if not documento:
+            raise ValidationError(
+                "Informe o número da Requisição, Processo ou Documento."
+            )
+
+        return documento
+
+    def clean_destino(self):
+        destino = self.cleaned_data.get('destino')
+
+        if not destino:
+            raise ValidationError(
+                "Selecione o destino da saída."
+            )
+
+        return destino
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        item = cleaned_data.get("item")
+        quantidade = cleaned_data.get("quantidade")
+
+        if item and quantidade:
+
+            saldo = item.saldo_atual()
+
+            if quantidade > saldo:
+
+                self.add_error(
+                    "quantidade",
+                    f"Estoque insuficiente. Saldo disponível: {saldo}"
+                )
+
+        return cleaned_data
 
 
 class ItemForm(forms.ModelForm):
